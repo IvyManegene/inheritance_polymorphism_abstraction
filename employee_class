@@ -1,0 +1,304 @@
+import java.util.Scanner;
+public abstract class Employee {
+   String name;
+   String emp_no;
+   int pin;
+   int age;
+
+    public Employee()
+    {
+        name = "";
+        emp_no = "";
+        pin = 0;
+        age = 0;
+    }
+    public Employee(String name, String emp_no, int pin, int age)
+    {
+        this.name = name;
+        this.emp_no = emp_no;
+        this.pin = pin;
+        this.age = age;
+    }
+    public String getName()
+    {
+        return name;
+    }
+    public String getEmp_no(){return emp_no;}
+    public int getPin() {return pin;}
+    public int getAge()
+    {
+        return age;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+    public void setEmp_no(String emp_no)
+    {
+        this.emp_no = emp_no;
+    }
+    public void setPin(int pin)
+    {
+        this.pin = pin;
+    }
+    public void setAge(int  age)
+    {
+        this.age = age;
+    }
+
+    public String toString()
+    {
+        return  "\nName: " + getName()+ "\nEmployee number: "+getEmp_no() + "\nPIN no: " + getPin()+ "\nAge:  "+ getAge() ;
+    }
+    public abstract double pay();
+    //abstract method
+}
+class Salaried extends Employee{
+    double salary;
+    Salaried(String name, String emp_no, int age, int pin, double salary)
+    {
+      super(name, emp_no, pin, age);
+      this.salary = salary;
+    }
+
+    @Override
+    public void setName(String name) {
+        super.setName(name);
+    }
+
+    @Override
+    public void setEmp_no(String emp_no) {
+        super.setEmp_no(emp_no);
+    }
+
+    @Override
+    public void setAge(int age) {
+        super.setAge(age);
+    }
+
+    @Override
+    public void setPin(int pin) {
+        super.setPin(pin);
+    }
+
+    @Override
+    public double pay() {
+        return salary;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public String toString()
+    {
+        return  super.toString()+ getAge() + "Salary: "+ getSalary();
+    }
+}
+class Casual extends Employee{
+    double payment;
+    int days_worked;
+
+    Casual(String name, String emp_no, int age, int pin, int days_worked)
+    {
+        super(name, emp_no, pin, age);
+        this.days_worked = days_worked;
+    }
+    @Override
+    public double pay()
+    {
+        payment = days_worked * Global.theDailyRate;
+        return payment;
+    }
+    @Override
+    public void setName(String name) {
+        super.setName(name);
+    }
+
+    @Override
+    public void setEmp_no(String emp_no) {
+        super.setEmp_no(emp_no);
+    }
+
+    @Override
+    public void setAge(int age) {
+        super.setAge(age);
+    }
+
+    @Override
+    public void setPin(int pin) {
+        super.setPin(pin);
+    }
+
+    public int getDays_worked() {
+        return days_worked;
+    }
+    @Override
+    public String toString()
+    {
+        return  super.toString() +"\tThe days worked: "+getDays_worked() + "\tPayment: "+ pay();
+    }
+}
+class PartTime extends Employee{
+    double payment, hours;
+
+    PartTime(String name, String emp_no, int pin, int age, double hours)
+    {
+      super(name, emp_no, pin, age);
+      this.hours = hours;
+    }
+    @Override
+    public void setName(String name) {
+        super.setName(name);
+    }
+
+    @Override
+    public void setEmp_no(String emp_no) {
+        super.setEmp_no(emp_no);
+    }
+
+    @Override
+    public void setAge(int age) {
+        super.setAge(age);
+    }
+
+    @Override
+    public void setPin(int pin) {
+        super.setPin(pin);
+    }
+    public double getHours() {
+        return hours;
+    }
+    @Override
+    public double pay()
+    {
+        if (this.hours <= 160)
+        {
+            payment = this.hours * Global.theHourlyRate;
+        }
+
+        else
+        {
+            payment = ((this.hours - 160) * (Global.theHourlyRate *1.5)) + (160 * Global.theHourlyRate);
+        }
+        return payment;
+    }
+
+    @Override
+    public String toString()
+    {
+        return  super.toString() + "\tHours worked:  "+getHours()+"\tPayment: "+ pay();
+    }
+}
+class Global{
+    public static double theHourlyRate = 36.0;
+    public static double theDailyRate = 500;
+}
+class TestDriver {
+    public static  void main(String[] args){
+
+        Salaried emp1 = new Salaried("Kelvin", "ST101", 36, 3523, 50000);
+        Casual emp2 = new Casual("Ivy", "CT102", 28, 3227,25 );
+        PartTime emp3 = new PartTime("Raphael", "PT103", 58, 1223, 174);
+        Employee emp4 = new Casual("Kelvin", "ST101", 36, 3523, 16);
+
+        System.out.println("\n\t\t***Salaried employees*");
+        System.out.println(emp1);
+        System.out.println("The end month salary of the employee is " + emp1.pay());
+
+        System.out.println("\n\t\t***Casual employees*");
+        System.out.println(emp2);
+        System.out.println("The end month salary of the employee is " + emp2.pay());
+
+        System.out.println("\n\t\t***Part-time employees*");
+        System.out.println(emp3);
+        System.out.println("The end month salary of the employee is " + emp3.pay());
+
+        System.out.println("\n\t\t***SALARIED employees REFERENCED BY EMPLOYEE*\n--------Dynamic Binding-------");
+        System.out.println(emp4);
+        System.out.println("The end month salary of the employee is " + emp4.pay());
+
+        System.out.flush();
+        String theName, theEmp_no;
+        int theAge, thePin, theDaysWorked, i;
+        double theSalary,theHours;
+        Scanner scan = new Scanner(System.in);
+        System.out.println("--------SALARIED EMPLOYEES BELOW---------");
+        Salaried [] salaried = new Salaried[2];
+
+        for(i = 0; i < salaried.length; i++)
+        {
+            System.out.println("Enter the Salaried Employee "+ (i+1) );
+            System.out.println("Enter the employee name -> ");
+            theName = scan.next();
+            System.out.println("Enter the employee number -> ");
+            theEmp_no = scan.next();
+            System.out.println("Enter the Employee  pin-> ");
+            thePin= scan.nextInt();
+            System.out.println("Enter the employee Age -> ");
+            theAge = scan.nextInt();
+            System.out.println("Enter the employee fixed monthly payment -> ");
+            theSalary = scan.nextDouble();
+            salaried[i] = new Salaried(theName, theEmp_no, thePin, theAge, theSalary);
+        }
+        System.out.println("--------CASUAL EMPLOYEES BELOW--------");
+        Casual [] casual = new Casual[2];
+       for (i = 0; i < casual.length; i++)
+        {
+            System.out.println("Enter the Details for Casual Employee "+ (i+1) );
+            System.out.println("Enter the employee name -> ");
+            theName = scan.next();
+            System.out.println("Enter the employee number -> ");
+            theEmp_no = scan.next();
+            System.out.println("Enter the Employee  pin-> ");
+            thePin= scan.nextInt();
+            System.out.println("Enter the employee Age -> ");
+            theAge = scan.nextInt();
+            System.out.println("Enter the employee days worked -> ");
+            theDaysWorked = scan.nextInt();
+            casual[i] = new Casual(theName, theEmp_no, thePin, theAge, theDaysWorked);
+        }
+        System.out.println("--------PARTTIME EMPLOYEES BELOW--------");
+        PartTime [] partTime= new PartTime[2];
+        for(i = 0; i < partTime.length; i++)
+        {
+            System.out.println("Enter the Details for PartTime Employee "+ (i+1) );
+            System.out.println("Enter the employee name -> ");
+            theName = scan.next();
+            System.out.println("Enter the employee number -> ");
+            theEmp_no = scan.next();
+            System.out.println("Enter the Employee  pin-> ");
+            thePin= scan.nextInt();
+            System.out.println("Enter the employee Age -> ");
+            theAge = scan.nextInt();
+            System.out.println("Enter the employee hours worked -> ");
+            theHours = scan.nextInt();
+            partTime[i] =  new PartTime(theName, theEmp_no, thePin, theAge, theHours);
+        }
+
+        System.out.flush();
+        System.out.println("-------------------The details of various Categories of Employees--------------");
+        System.out.println("\n\t\t***ALL Salaried employees Output**");
+        for(i = 0; i < salaried.length; i++)
+        {
+            System.out.println(salaried[i]);
+            System.out.println();
+        }
+        System.out.println();
+        System.out.println("\n\t\t***Casual employees**");
+        for(i = 0; i < casual.length; i++)
+        {
+            System.out.println(casual[i]);
+            System.out.println();
+        }
+        System.out.println();
+        System.out.println("\n\t\t***PartTime employees**");
+        for(i = 0; i < partTime.length; i++)
+        {
+            System.out.println(partTime[i]);
+            System.out.println();
+        }
+        System.out.println();
+    }
+}
